@@ -1,5 +1,6 @@
 import numpy as np
 import pygame
+import sys
 
 COMPTEUR_LIGNE = 6
 COMPTEUR_COLONNE = 7
@@ -51,9 +52,12 @@ def tour_gagnant(plateau, piece):
     # Verification des diagonales positive :
     for c in range(COMPTEUR_COLONNE - 3):
         for l in range(3, COMPTEUR_LIGNE):
-            if plateau[l][c] == piece and plateau[l + -1][c + 1] == piece and plateau[l - 2][c + 2] and plateau[l - 3][
-                c + 3]:
+            if plateau[l][c] == piece and plateau[l + -1][c + 1] == piece and plateau[l - 2][c + 2] and plateau[l - 3][c + 3]:
                 return True
+
+
+def dessin_plateau(plateau):
+    for
 
 
 plateau = creation_plateau()
@@ -71,24 +75,35 @@ taille = (largeur, hauteur)
 ecran = pygame.display.set_mode(taille)
 
 while not fin_partie:
-    if tour == 0:
-        col = int(input("Player 1 make your selection"))
-        if col_valid(plateau, col):
-            ligne = ligne_valid(plateau, col)
-            piece_tombe(plateau, ligne, col, 1)
-            if tour_gagnant(plateau, 1):
-                print("Le joueur 1 gagne !! Bravo !!")
-                fin_partie = True
+    for evenement in pygame.event.get():
+        if evenement.type == pygame.QUIT:
+            sys.exit()
 
-    else:
-        col = int(input("Player 2 make your selection"))
-        if col_valid(plateau, col):
-            ligne = ligne_valid(plateau, col)
-            piece_tombe(plateau, ligne, col, 2)
-            if tour_gagnant(plateau, 2):
-                print("Le joueur 2 gagne !! Bravo !!")
-                fin_partie = True
+        if evenement.type == pygame.MOUSEBUTTONDOWN:
+            print('')
+        #     if tour == 0:
+        #         col =
+        #         if col_valid(plateau, col):
+        #             ligne = ligne_valid(plateau, col)
+        #             piece_tombe(plateau, ligne, col, 1)
+        #             if tour_gagnant(plateau, 1):
+        #                 print("Le joueur 1 gagne !! Bravo !!")
+        #                 fin_partie = True
+        #
+        #     else:
+        #         col = int(input("Player 2 make your selection"))
+        #         if col_valid(plateau, col):
+        #             ligne = ligne_valid(plateau, col)
+        #             piece_tombe(plateau, ligne, col, 2)
+        #             if tour_gagnant(plateau, 2):
+        #                 print("Le joueur 2 gagne !! Bravo !!")
+        #                 fin_partie = True
+        # affichage_plateau(plateau)
+        # tour += 1
+        # tour = tour % 2
 
-    affichage_plateau(plateau)
-    tour += 1
-    tour = tour % 2
+
+
+
+
+
