@@ -1,57 +1,94 @@
 import numpy as np
+import pygame
 
-ROW_COUNT = 6
-COLUMN_COUNT = 7
-
-
-def create_board():
-    board = np.zeros((ROW_COUNT, COLUMN_COUNT))
-    return board
+COMPTEUR_LIGNE = 6
+COMPTEUR_COLONNE = 7
 
 
-def drop_piece(board, row, col, piece):
-    board[row][col] = piece
+def creation_plateau():
+    plateau = np.zeros((COMPTEUR_LIGNE, COMPTEUR_COLONNE))
+    return plateau
 
 
-def is_valid_location(board, col):
-    return board[ROW_COUNT-1][col] == 0
+def piece_tombe(plateau, row, col, piece):
+    plateau[row][col] = piece
 
 
-def get_next_open_row(board, col):
-    for r in range(ROW_COUNT):
-        if board[r][col] == 0:
-            return r
+def col_valid(plateau, col):
+    return plateau[COMPTEUR_LIGNE - 1][col] == 0
 
 
-def print_board(board):
-    print(np.flip(board, 0))
+def ligne_valid(plateau, col):
+    for l in range(COMPTEUR_LIGNE):
+        if plateau[l][col] == 0:
+            return l
 
-def winning_move(board,piece):
-    #Horizontal voir si il y a un gagnant
-    for c in range(COLUMN_COUNT-3):
-        for r in range(ROW_COUNT):
-            if board[r][c] == piece and board[r][c+1] == piece and board[r][c+2]and board[r][c+3]:
+
+def affichage_plateau(plateau):
+    print(np.flip(plateau, 0))
+
+
+def tour_gagnant(plateau, piece):
+    # Horizontal voir si il y a un gagnant
+    for c in range(COMPTEUR_COLONNE - 3):
+        for l in range(COMPTEUR_LIGNE):
+            if plateau[l][c] == piece and plateau[l][c + 1] == piece and plateau[l][c + 2] and plateau[l][c + 3]:
+                return True
+
+    # Verification de la verticale
+    for c in range(COMPTEUR_COLONNE):
+        for l in range(COMPTEUR_LIGNE - 3):
+            if plateau[l][c] == piece and plateau[l + 1][c] == piece and plateau[l + 2][c] and plateau[l + 3][c]:
+                return True
+
+    # Verification des diagonales positive :
+    for c in range(COMPTEUR_COLONNE - 3):
+        for l in range(COMPTEUR_LIGNE - 3):
+            if plateau[l][c] == piece and plateau[l + 1][c + 1] == piece and plateau[l + 2][c + 2] and plateau[l + 3][
+                c + 3]:
+                return True
+
+    # Verification des diagonales positive :
+    for c in range(COMPTEUR_COLONNE - 3):
+        for l in range(3, COMPTEUR_LIGNE):
+            if plateau[l][c] == piece and plateau[l + -1][c + 1] == piece and plateau[l - 2][c + 2] and plateau[l - 3][
+                c + 3]:
                 return True
 
 
+plateau = creation_plateau()
+fin_partie = False
+tour = 0
 
-board = create_board()
-game_over = False
-turn = 0
+pygame.init()
 
-while not game_over:
-    if turn == 0:
+TAILLE_CARRE = 100
+largeur = COMPTEUR_COLONNE * TAILLE_CARRE
+hauteur = (COMPTEUR_LIGNE + 1) * TAILLE_CARRE
+
+taille = (largeur, hauteur)
+
+ecran = pygame.display.set_mode(taille)
+
+while not fin_partie:
+    if tour == 0:
         col = int(input("Player 1 make your selection"))
-        if is_valid_location(board, col):
-            row = get_next_open_row(board, col)
-            drop_piece(board, row, col, 1)
+        if col_valid(plateau, col):
+            ligne = ligne_valid(plateau, col)
+            piece_tombe(plateau, ligne, col, 1)
+            if tour_gagnant(plateau, 1):
+                print("Le joueur 1 gagne !! Bravo !!")
+                fin_partie = True
 
     else:
         col = int(input("Player 2 make your selection"))
-        if is_valid_location(board, col):
-            row = get_next_open_row(board, col)
-            drop_piece(board, row, col, 2)
+        if col_valid(plateau, col):
+            ligne = ligne_valid(plateau, col)
+            piece_tombe(plateau, ligne, col, 2)
+            if tour_gagnant(plateau, 2):
+                print("Le joueur 2 gagne !! Bravo !!")
+                fin_partie = True
 
-    print_board(board)
-    turn += 1
-    turn = turn % 2
+    affichage_plateau(plateau)
+    tour += 1
+    tour = tour % 2
