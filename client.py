@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 import socket
+import sys
 
 
 HEADER = 64
 PORT = 40001
 FORMAT = 'utf-8'
-DECONNEXION = "!DECONNEXION"
+DECONNEXION = "!FIN"
 SERVER = "vps-aef73ebf.vps.ovh.net"
 ADDR = (SERVER, PORT)
 
@@ -23,6 +24,13 @@ def envoyer(msg):
 
 def communication():
     while (True):
-        envoyer(input())
+        try:
+            envoyer(input())
+        except KeyboardInterrupt:
+            print("[STATUT] Envoi du signal de fin de connexion...")
+            envoyer(DECONNEXION)
+            print("[STATUT] Au revoir !")
+            sys.exit()
 
-communication()
+if(__name__ == "__main__"):
+    communication()
