@@ -2,6 +2,7 @@ import numpy as np
 import pygame
 import sys
 import math
+import pygame_textinput
 
 BLEU = (0, 0, 255)
 NOIR = (0, 0, 0)
@@ -101,6 +102,9 @@ pygame.display.update()
 
 myfont = pygame.font.SysFont("monospace", 35)
 
+textinput = pygame_textinput.TextInput()
+clock = pygame.time.Clock()
+
 
 while not fin_partie:
     for evenement in pygame.event.get():
@@ -118,7 +122,6 @@ while not fin_partie:
 
         if evenement.type == pygame.MOUSEBUTTONDOWN:
             pygame.draw.rect(ecran, NOIR, (0, 0, largeur, TAILLE_CARRE))
-            # print(evenement.pos)
             if tour == 0:
                 posx = evenement.pos[0]
                 col = math.floor(posx / TAILLE_CARRE)
