@@ -81,73 +81,74 @@ def dessin_plateau(plateau):
                                    RAYON)
     pygame.display.update()
 
+if __name__ == '__main__':
+    
+    plateau = creation_plateau()
+    fin_partie = False
+    tour = 0
 
-plateau = creation_plateau()
-fin_partie = False
-tour = 0
+    pygame.init()
 
-pygame.init()
+    TAILLE_CARRE = 100
+    largeur = COMPTEUR_COLONNE * TAILLE_CARRE
+    hauteur = (COMPTEUR_LIGNE + 1) * TAILLE_CARRE
 
-TAILLE_CARRE = 100
-largeur = COMPTEUR_COLONNE * TAILLE_CARRE
-hauteur = (COMPTEUR_LIGNE + 1) * TAILLE_CARRE
+    RAYON = int(TAILLE_CARRE / 2 - 5)
 
-RAYON = int(TAILLE_CARRE / 2 - 5)
+    taille = (largeur, hauteur)
 
-taille = (largeur, hauteur)
+    ecran = pygame.display.set_mode(taille)
+    dessin_plateau(plateau)
+    pygame.display.update()
 
-ecran = pygame.display.set_mode(taille)
-dessin_plateau(plateau)
-pygame.display.update()
+    myfont = pygame.font.SysFont("monospace", 35)
 
-myfont = pygame.font.SysFont("monospace", 35)
-
-textinput = pygame_textinput.TextInput()
-clock = pygame.time.Clock()
+    textinput = pygame_textinput.TextInput()
+    clock = pygame.time.Clock()
 
 
-while not fin_partie:
-    for evenement in pygame.event.get():
-        if evenement.type == pygame.QUIT:
-            sys.exit()
+    while not fin_partie:
+        for evenement in pygame.event.get():
+            if evenement.type == pygame.QUIT:
+                sys.exit()
 
-        if evenement.type == pygame.MOUSEMOTION:
-            pygame.draw.rect(ecran, NOIR, (0,0, largeur, TAILLE_CARRE))
-            posx = evenement.pos[0]
-            if tour == 0:
-                pygame.draw.circle(ecran, ROUGE, (posx, int(TAILLE_CARRE / 2)), RAYON)
-            else:
-                pygame.draw.circle(ecran, JAUNE, (posx, int(TAILLE_CARRE / 2)), RAYON)
-        pygame.display.update()
-
-        if evenement.type == pygame.MOUSEBUTTONDOWN:
-            pygame.draw.rect(ecran, NOIR, (0, 0, largeur, TAILLE_CARRE))
-            if tour == 0:
+            if evenement.type == pygame.MOUSEMOTION:
+                pygame.draw.rect(ecran, NOIR, (0,0, largeur, TAILLE_CARRE))
                 posx = evenement.pos[0]
-                col = math.floor(posx / TAILLE_CARRE)
-                if col_valid(plateau, col):
-                    ligne = ligne_valid(plateau, col)
-                    piece_tombe(plateau, ligne, col, 1)
-                    if tour_gagnant(plateau, 1):
-                        label = myfont.render("Le joueur 1 a gagné", 1, ROUGE)
-                        ecran.blit(label, (40,10))
-                        fin_partie = True
+                if tour == 0:
+                    pygame.draw.circle(ecran, ROUGE, (posx, int(TAILLE_CARRE / 2)), RAYON)
+                else:
+                    pygame.draw.circle(ecran, JAUNE, (posx, int(TAILLE_CARRE / 2)), RAYON)
+            pygame.display.update()
 
-            else:
-                posx = evenement.pos[0]
-                col = math.floor(posx / TAILLE_CARRE)
-                if col_valid(plateau, col):
-                    ligne = ligne_valid(plateau, col)
-                    piece_tombe(plateau, ligne, col, 2)
-                    if tour_gagnant(plateau, 2):
-                        label = myfont.render("Le joueur 2 a gagné", 1, JAUNE)
-                        ecran.blit(label, (40, 10))
-                        fin_partie = True
+            if evenement.type == pygame.MOUSEBUTTONDOWN:
+                pygame.draw.rect(ecran, NOIR, (0, 0, largeur, TAILLE_CARRE))
+                if tour == 0:
+                    posx = evenement.pos[0]
+                    col = math.floor(posx / TAILLE_CARRE)
+                    if col_valid(plateau, col):
+                        ligne = ligne_valid(plateau, col)
+                        piece_tombe(plateau, ligne, col, 1)
+                        if tour_gagnant(plateau, 1):
+                            label = myfont.render("Le joueur 1 a gagné", 1, ROUGE)
+                            ecran.blit(label, (40,10))
+                            fin_partie = True
 
-            affichage_plateau(plateau)
-            dessin_plateau(plateau)
-            tour += 1
-            tour = tour % 2
+                else:
+                    posx = evenement.pos[0]
+                    col = math.floor(posx / TAILLE_CARRE)
+                    if col_valid(plateau, col):
+                        ligne = ligne_valid(plateau, col)
+                        piece_tombe(plateau, ligne, col, 2)
+                        if tour_gagnant(plateau, 2):
+                            label = myfont.render("Le joueur 2 a gagné", 1, JAUNE)
+                            ecran.blit(label, (40, 10))
+                            fin_partie = True
 
-            if fin_partie :
-                pygame.time.wait(3000)
+                affichage_plateau(plateau)
+                dessin_plateau(plateau)
+                tour += 1
+                tour = tour % 2
+
+                if fin_partie :
+                    pygame.time.wait(3000)

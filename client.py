@@ -3,8 +3,10 @@ import socket
 import sys
 import threading
 
+
 from datetime import datetime
 
+import username
 
 HEADER = 64
 PORT = 40001
@@ -12,8 +14,6 @@ FORMAT = 'utf-8'
 DECONNEXION = "!FIN"
 SERVER = "vps-aef73ebf.vps.ovh.net"
 ADDR = (SERVER, PORT)
-
-
 
 
 
@@ -30,7 +30,7 @@ def reception_async(conn):
     while True:
         contenu = recevoir(conn)
         if(contenu != None):
-            print(recevoir(conn))
+            print(contenu)
 
 def recevoir(conn):
     longueur_message = conn.recv(HEADER).decode(FORMAT)
@@ -39,16 +39,26 @@ def recevoir(conn):
         message = conn.recv(longueur_message).decode(FORMAT)
         return message
 
+def partie(conn):
+    while True:
+        envoyer(input(), conn)
+        #afficher tableau
+
 def rejoindre():
     conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     print("Bienvenue dans le jeu du puissance 4!")
     print("Nom d'utilisateur :")
+    #pseudo = username.form_pseudo()
     pseudo = input()
 
     conn.connect(ADDR)
     ecoute = threading.Thread(target=reception_async, args=(conn,))
     ecoute.start()
     envoyer(pseudo, conn)
+
+    partie(conn)
+
+
 
 
 
