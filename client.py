@@ -2,7 +2,7 @@
 import socket
 import sys
 import threading
-
+import pickle
 
 from datetime import datetime
 
@@ -29,17 +29,24 @@ def envoyer(msg, client):
 def reception_async(conn):
     while True:
         contenu = recevoir(conn)
-        if(contenu != None):
+        if(contenu is not None):
             print(contenu)
+            
 
 def recevoir(conn):
     longueur_message = conn.recv(HEADER).decode(FORMAT)
+    print("longueur : ",longueur_message)
     if(longueur_message):
         longueur_message = int (longueur_message)
-        message = conn.recv(longueur_message).decode(FORMAT)
+        message = conn.recv(longueur_message)
+        try:
+            message = message.decode(FORMAT)
+        except:
+            message = pickle.loads(message)
         return message
 
 def partie(conn):
+
     while True:
         envoyer(input(), conn)
         #afficher tableau
@@ -57,8 +64,6 @@ def rejoindre():
     envoyer(pseudo, conn)
 
     partie(conn)
-
-
 
 
 
