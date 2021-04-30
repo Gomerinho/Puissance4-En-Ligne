@@ -48,11 +48,10 @@ def recevoir(conn):
             message = pickle.loads(message)
         return message
 
-def partie(conn):
 
+def partie(conn):
     while True:
         envoyer(input(), conn)
-        #afficher tableau
 
 def rejoindre():
     conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -67,7 +66,6 @@ def rejoindre():
     envoyer(pseudo, conn)
 
     partie(conn)
-
 
 
 if(__name__ == "__main__"):
