@@ -31,6 +31,14 @@ def ligne_valid(plateau, col):
         if plateau[l][col] == 0:
             return l
 
+def verif_egalite(plateau):
+    egalite = True
+    for c in range(COMPTEUR_COLONNE):
+        for l in range(COMPTEUR_LIGNE):
+            if plateau[l][c] == 0:
+                egalite = False
+    return egalite
+
 
 def affichage_plateau(plateau):
     print(np.flip(plateau, 0))
@@ -129,6 +137,10 @@ if __name__ == '__main__':
                     if col_valid(plateau, col):
                         ligne = ligne_valid(plateau, col)
                         piece_tombe(plateau, ligne, col, 1)
+                        if verif_egalite(plateau):
+                            label = myfont.render("Egalite", 1, BLEU)
+                            ecran.blit(label, (40, 10))
+                            fin_partie = True
                         if tour_gagnant(plateau, 1):
                             label = myfont.render("Le joueur 1 a gagné", 1, ROUGE)
                             ecran.blit(label, (40,10))
@@ -140,6 +152,10 @@ if __name__ == '__main__':
                     if col_valid(plateau, col):
                         ligne = ligne_valid(plateau, col)
                         piece_tombe(plateau, ligne, col, 2)
+                        if verif_egalite(plateau):
+                            label = myfont.render("Egalite", 1, BLEU)
+                            ecran.blit(label, (40, 10))
+                            fin_partie = True
                         if tour_gagnant(plateau, 2):
                             label = myfont.render("Le joueur 2 a gagné", 1, JAUNE)
                             ecran.blit(label, (40, 10))
