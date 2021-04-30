@@ -28,14 +28,16 @@ def envoyer(msg, client):
     
 def reception_async(conn):
     while True:
-        contenu = recevoir(conn)
-        if(contenu is not None):
-            print(contenu)
+        try:
+            contenu = recevoir(conn)
+            if(contenu is not None):
+                print(contenu)
+        except:
+            print("Erreur lors de la réception.")
             
 
 def recevoir(conn):
     longueur_message = conn.recv(HEADER).decode(FORMAT)
-    print("longueur : ",longueur_message)
     if(longueur_message):
         longueur_message = int (longueur_message)
         message = conn.recv(longueur_message)
