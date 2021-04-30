@@ -33,7 +33,8 @@ def reception_async(conn):
             if(contenu is not None):
                 print(contenu)
         except:
-            print("Erreur lors de la réception.")
+            print("Erreur fatale lors de la réception. Cause probable : défaillance du serveur. Fin du programme.")
+            break
             
 
 def recevoir(conn):
