@@ -38,20 +38,26 @@ def reception_async(conn):
             
 
 def recevoir(conn):
-    longueur_message = conn.recv(HEADER).decode(FORMAT)
-    if(longueur_message):
-        longueur_message = int (longueur_message)
-        message = conn.recv(longueur_message)
-        try:
-            message = message.decode(FORMAT)
-        except:
-            message = pickle.loads(message)
-        return message
-
+    try :
+        longueur_message = conn.recv(HEADER).decode(FORMAT)
+        if(longueur_message):
+            longueur_message = int (longueur_message)
+            message = conn.recv(longueur_message)
+            try:
+                message = message.decode(FORMAT)
+            except:
+                message = pickle.loads(message)
+            return message
+    except KeyboardInterrupt:
+        print("Vous ne pouvez pas quitter la partie maintenant. Attendez que ce soit votre tour de jouer.")
 
 def partie(conn):
     while True:
-        envoyer(input(), conn)
+        try:
+            envoyer(input(), conn)
+        except KeyboardInterrupt:
+            print("Envoi du signal de fin de connexion...")
+            envoyer(DECONNEXION, conn)
 
 def rejoindre():
     conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
